@@ -1,0 +1,164 @@
+    <!DOCTYPE html>
+    <html lang="vi">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <meta name="theme-color" content="#6d28d9">
+        <title>Chinh phục số nguyên - Toán lớp 6</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body class="min-h-screen text-slate-800">
+        <header class="app-header">
+            <button id="home-btn" onclick="confirmGoHome()" class="home-button hidden">🏠 Trang chủ</button>
+            <div class="brand">
+                <span class="brand-icon">🧮</span>
+                <h1>CHINH PHỤC SỐ NGUYÊN</h1>
+            </div>
+            <button id="sound-toggle-btn" onclick="toggleSound()" class="sound-button" title="Bật/tắt âm thanh" aria-label="Bật/tắt âm thanh">🔊</button>
+			<button
+				id="fullscreen-btn"
+				type="button"
+				class="fullscreen-button"
+				onclick="toggleFullscreen()"
+				title="Bật toàn màn hình"
+				aria-label="Bật toàn màn hình">
+				⛶
+			</button>
+        </header>
+
+        <main class="app-main">
+            <!-- TRANG CHỦ: CHỈ GỒM 4 THẺ -->
+            <section id="view-home" class="home-view">
+                <div class="intro">
+                    <h2>Em chọn thử thách nhé! 🌟</h2>
+                    <p>Luyện tập phép cộng và phép trừ số nguyên</p>
+                    <p class="grade-label">TOÁN LỚP 6</p>
+                </div>
+
+                <div class="home-grid">
+                    <button type="button" onclick="startPractice('addition')" class="home-card card-add">
+                        <span class="card-number">01</span>
+                        <span class="card-emoji">➕</span>
+                        <span class="card-title">TẬP CỘNG</span>
+                        <span class="card-description">Cộng hai số nguyên</span>
+                        <span class="card-action">BẮT ĐẦU 🚀</span>
+                    </button>
+
+                    <button type="button" onclick="startPractice('subtraction')" class="home-card card-sub">
+                        <span class="card-number">02</span>
+                        <span class="card-emoji">➖</span>
+                        <span class="card-title">TẬP TRỪ</span>
+                        <span class="card-description">Trừ hai số nguyên</span>
+                        <span class="card-action">BẮT ĐẦU 🚀</span>
+                    </button>
+
+                    <button type="button" onclick="startPractice('mixed')" class="home-card card-mixed">
+                        <span class="card-number">03</span>
+                        <span class="card-emoji">🔀</span>
+                        <span class="card-title">CỘNG VÀ TRỪ</span>
+                        <span class="card-description">Phối hợp hai phép tính</span>
+                        <span class="card-action">BẮT ĐẦU 🚀</span>
+                    </button>
+
+                    <button type="button" onclick="startPractice('challenge')" class="home-card card-challenge">
+                        <span class="card-number">04</span>
+                        <span class="card-emoji">🏆</span>
+                        <span class="card-title">THỬ THÁCH</span>
+                        <span class="card-description">Đạt 20 câu đúng liên tiếp</span>
+                        <span class="card-action">CHINH PHỤC ⭐</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- MÀN HÌNH LUYỆN TẬP -->
+            <section id="view-game" class="game-view hidden">
+                <div class="game-topbar">
+                    <div>
+                        <div id="game-mode-badge" class="mode-badge">➕ TẬP CỘNG</div>
+                        <div id="game-subtitle" class="game-subtitle">Luyện tập phép cộng số nguyên</div>
+                    </div>
+                    <div class="game-stats">
+                        <div class="stat-item"><span>⭐ Điểm</span><strong id="score-display">0</strong></div>
+                        <div class="stat-item"><span>📝 Câu</span><strong id="current-q-num">1</strong></div>
+                    </div>
+                </div>
+
+                <div class="progress-wrap" id="progress-wrap">
+                    <div class="progress-label">
+                        <span id="progress-caption">Tiến độ luyện tập</span>
+                        <strong id="progress-value">Bắt đầu</strong>
+                    </div>
+                    <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-decoration">✨</div>
+                    <p class="question-label" id="question-label">Tính kết quả phép tính sau:</p>
+                    <div id="equation-display-area" class="equation-area">
+                        <span id="problem-text">(-5) + 8</span>
+                        <span class="equals-sign">=</span>
+                        <span id="user-answer-display" class="answer-display">?</span>
+                    </div>
+                    <p id="feedback-text" class="feedback-text" aria-live="polite">Hãy nhập đáp án của em nhé!</p>
+
+                    <div id="rule-box" class="rule-box hidden">
+                        <div class="rule-heading">📖 QUY TẮC CẦN NHỚ</div>
+                        <div id="rule-content"></div>
+                    </div>
+
+                    <div id="action-buttons-container" class="action-buttons hidden">
+                        <button id="btn-retry" onclick="retryQuestion()" class="action-button retry-button">🔄 THỬ LẠI</button>
+                        <button id="btn-next" onclick="nextQuestion()" class="action-button next-button hidden">CÂU TIẾP ➜</button>
+                    </div>
+                </div>
+
+                <div id="keypad-container" class="keypad">
+                    <button type="button" onclick="appendNumber('1')">1</button>
+                    <button type="button" onclick="appendNumber('2')">2</button>
+                    <button type="button" onclick="appendNumber('3')">3</button>
+                    <button type="button" onclick="appendNumber('4')">4</button>
+                    <button type="button" onclick="appendNumber('5')">5</button>
+                    <button type="button" onclick="appendNumber('6')">6</button>
+                    <button type="button" onclick="appendNumber('7')">7</button>
+                    <button type="button" onclick="appendNumber('8')">8</button>
+                    <button type="button" onclick="appendNumber('9')">9</button>
+                    <button type="button" onclick="toggleNegative()" class="sign-key">±</button>
+                    <button type="button" onclick="appendNumber('0')">0</button>
+                    <button type="button" onclick="deleteNumber()" class="delete-key">⌫</button>
+                    <button type="button" onclick="submitAnswer()" class="submit-key">✓ XÁC NHẬN</button>
+                </div>
+                <p class="keyboard-note">Em cũng có thể nhập số bằng bàn phím máy tính và nhấn Enter.</p>
+            </section>
+
+            <!-- MÀN HÌNH CHIẾN THẮNG -->
+            <section id="view-summary" class="summary-view hidden">
+                <div class="summary-card">
+                    <div class="trophy">🏆</div>
+                    <h2>CHÚC MỪNG EM!</h2>
+                    <p>Em đã chinh phục thành công thử thách 20 điểm!</p>
+                    <div class="summary-score"><strong id="final-score">20/20</strong><span>Điểm liên tiếp</span></div>
+                    <p class="summary-message">Kiên trì luyện tập sẽ giúp em ngày càng giỏi Toán hơn!</p>
+                    <button onclick="restartCurrentMode()" class="primary-button">🔄 CHƠI LẠI</button>
+                    <button onclick="goHome()" class="secondary-button">🏠 VỀ TRANG CHỦ</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- HỘP THOẠI XÁC NHẬN VỀ TRANG CHỦ -->
+        <div id="confirm-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+            <div class="modal-card">
+                <div class="modal-emoji">🤔</div>
+                <h3 id="confirm-title">Kết thúc lượt luyện tập?</h3>
+                <p>Tiến độ của lượt chơi hiện tại sẽ được kết thúc.</p>
+                <div class="modal-actions">
+                    <button onclick="closeConfirmModal()" class="secondary-button">TIẾP TỤC</button>
+                    <button onclick="executeGoHome()" class="danger-button">THOÁT</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+    </html>
